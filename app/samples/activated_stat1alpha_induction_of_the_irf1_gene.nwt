@@ -1,6 +1,6 @@
 ﻿<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
 <sbgn xmlns="http://sbgn.org/libsbgn/0.2">
-  <map language="process description">
+  <map language="sif">
     <extension>
       <renderInformation
         xmlns="http://www.sbml.org/sbml/level3/version1/render/version1" id="renderInformation" programName="sbgnviz" programVersion="4.0.2" backgroundColor="#000000">
@@ -33,7 +33,7 @@
           <style id="nodeffffff15555551.25" idList="nwtN_b4078d10-6b7d-456b-a754-5a3975cbe1ac">
             <g stroke="color_2" strokeWidth="1.25" fill="color_1"/>
           </style>
-          <style id="edge5555551.25" idList="_5491eb3b-6a5f-4f9d-b67d-e922e04d3020 _0459b128-2bee-44af-8ba9-383b6910c1e1 _4ee2bde6-472d-4524-9553-049e291af07d _0ad8dcf1-cac1-41b3-95a5-cbf68587f704 be7ed04d-e856-4c84-b27c-2fa49b5177d6 b4225995-e295-4243-bf85-798329327c1b _3efdeb75-2c5a-42cf-983a-e1965f773e4a nwtE_7a07ebe7-6e47-4960-a9ea-cec4309acd73 nwtE_e68abc8b-12b6-4f69-ae3d-395949f338df _4766ca86-a8d5-4b08-adc5-f3cc051ad699 nwtE_e03c5f9a-c251-43c8-a559-1b2a93a5ccff">
+          <style id="edge5555551.25" idList="_5491eb3b-6a5f-4f9d-b67d-e922e04d3020 _sif5491eb3b-6a5f-4f9d-b67d-e922e04d3020 _0459b128-2bee-44af-8ba9-383b6910c1e1 _4ee2bde6-472d-4524-9553-049e291af07d _0ad8dcf1-cac1-41b3-95a5-cbf68587f704 be7ed04d-e856-4c84-b27c-2fa49b5177d6 b4225995-e295-4243-bf85-798329327c1b _3efdeb75-2c5a-42cf-983a-e1965f773e4a nwtE_7a07ebe7-6e47-4960-a9ea-cec4309acd73 nwtE_e68abc8b-12b6-4f69-ae3d-395949f338df _4766ca86-a8d5-4b08-adc5-f3cc051ad699 nwtE_e03c5f9a-c251-43c8-a559-1b2a93a5ccff">
             <g stroke="color_2" strokeWidth="1.25"/>
           </style>
         </listOfStyles>
@@ -175,6 +175,11 @@ using logical operators</mapDescription>
       <port id="nwtN_b4078d10-6b7d-456b-a754-5a3975cbe1ac.2" x="306.48014703667945" y="350.45196881648906"/>
     </glyph>
     <arc id="_5491eb3b-6a5f-4f9d-b67d-e922e04d3020" class="consumption" source="glyph2" target="glyph9.1">
+      <start x="237.76401832505422" y="95.84609843233484"/>
+      <end x="194.69557595308527" y="126.14368025458344"/>
+    </arc>
+    <arc id="_sif5491eb3b-6a5f-4f9d-b67d-e922e04d3020" class="inhibits" source="glyph2" target="glyph9.1" pcIDs="http://pathwaycommons.org/pc2/BiochemicalReaction_3c44d157a029202c9522b33d20663d9a http://pathwaycommons.org/pc2/">
+      <pcIDs>http://pathwaycommons.org/pc2/BiochemicalReaction_3c44d157a029202c9522b33d20663d9a http://pathwaycommons.org/pc2/</pcIDs>
       <start x="237.76401832505422" y="95.84609843233484"/>
       <end x="194.69557595308527" y="126.14368025458344"/>
     </arc>

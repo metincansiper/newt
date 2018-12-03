@@ -591,7 +591,7 @@ module.exports = function() {
       "#load-sample1" : 'neuronal_muscle_signaling.sbgnml',
       "#load-sample2" : 'cam-camk_dependent_signaling_to_the_nucleus.sbgnml',
       "#load-sample3" : 'atm_mediated_phosphorylation_of_repair_proteins.sbgnml',
-      "#load-sample4" : 'activated_stat1alpha_induction_of_the_irf1_gene.sbgnml',
+      "#load-sample4" : 'activated_stat1alpha_induction_of_the_irf1_gene.nwt',
       "#load-sample5" : 'vitamins_b6_activation_to_pyridoxal_phosphate.sbgnml',
       "#load-sample6" : 'insulin-like_growth_factor_signaling.sbgnml',
       "#load-sample7" : 'polyq_proteins_interference.sbgnml',
