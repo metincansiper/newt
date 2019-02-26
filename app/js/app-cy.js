@@ -4,7 +4,6 @@ var modeHandler = require('./app-mode-handler');
 var inspectorUtilities = require('./inspector-utilities');
 var appUndoActionsFactory = require('./app-undo-actions-factory');
 var _ = require('underscore');
-var Tippy = require('tippy.js');
 
 module.exports = function (chiseInstance) {
   var getExpandCollapseOptions = appUtilities.getExpandCollapseOptions.bind(appUtilities);
@@ -37,7 +36,6 @@ module.exports = function (chiseInstance) {
     ur.action("changeMenu", appUndoActions.changeMenu, appUndoActions.changeMenu);
     ur.action("refreshColorSchemeMenu", appUndoActions.refreshColorSchemeMenu, appUndoActions.refreshColorSchemeMenu);
     ur.action("relocateInfoBoxes", appUndoActions.relocateInfoBoxes, appUndoActions.relocateInfoBoxes);
-    ur.action("applySIFTopologyGrouping", appUndoActions.applySIFTopologyGrouping, appUndoActions.applySIFTopologyGrouping);
   }
 
   function cytoscapeExtensionsAndContextMenu() {
@@ -248,7 +246,7 @@ module.exports = function (chiseInstance) {
       {
         id: 'ctx-menu-relocate-info-boxes',
         content: 'Relocate Information Boxes',
-        selector: 'node[class^="macromolecule"],[class^="complex"],[class^="simple chemical"],[class^="nucleic acid feature"],[class^="compartment"],[class="protein"],[class="small macromolecule"]',
+        selector: 'node[class^="macromolecule"],[class^="complex"],[class^="simple chemical"],[class^="nucleic acid feature"],[class^="compartment"],[class="SIF macromolecule"],[class="SIF simple chemical"]',
         onClickFunction: function (event){
           var cyTarget = event.target || event.cyTarget;
           appUtilities.relocateInfoBoxes(cyTarget);
@@ -257,7 +255,7 @@ module.exports = function (chiseInstance) {
       {
         id: 'ctx-menu-tile-info-boxes',
         content: 'Tile Information Boxes',
-        selector: 'node[class^="macromolecule"],[class^="complex"],[class^="simple chemical"],[class^="nucleic acid feature"],[class^="compartment"],[class="protein"],[class="small macromolecule"]',
+        selector: 'node[class^="macromolecule"],[class^="complex"],[class^="simple chemical"],[class^="nucleic acid feature"],[class^="compartment"],[class="SIF macromolecule"],[class="SIF simple chemical"]',
         onClickFunction: function (event){
           var cyTarget = event.target || event.cyTarget;
           var locations = ["top", "bottom", "right", "left"]; //Fit all locations
@@ -268,7 +266,7 @@ module.exports = function (chiseInstance) {
         id: 'ctx-menu-fit-content-into-node',
         content: 'Resize Node to Content',
         selector: 'node[class^="macromolecule"],[class^="complex"],[class^="simple chemical"],[class^="nucleic acid feature"],' +
-        '[class^="unspecified entity"], [class^="perturbing agent"],[class^="phenotype"],[class^="tag"],[class^="compartment"],[class^="submap"],[class^="BA"],[class="protein"],[class="small macromolecule"]',
+        '[class^="unspecified entity"], [class^="perturbing agent"],[class^="phenotype"],[class^="tag"],[class^="compartment"],[class^="submap"],[class^="BA"],[class="SIF macromolecule"],[class="SIF simple chemical"]',
         onClickFunction: function (event) {
             var cyTarget = event.target || event.cyTarget;
             //Collection holds the element and is used to generalize resizeNodeToContent function (which is used from Edit-> Menu)
@@ -1241,85 +1239,6 @@ module.exports = function (chiseInstance) {
       });
 
       node.style(opt);
-    });
-
-    cy.on('tap', 'node', function(event) {
-      var pos = event.position || event.cyPosition;
-      var node = event.target || event.cyTarget;
-      var ref; // used only for positioning
-      var pan = cy.pan();
-      var zoom = cy.zoom();
-
-      var infobox = chiseInstance.classes.AuxiliaryUnit.checkPoint(pos.x, pos.y, node, 0);
-      var tooltipContent;
-
-      if (!infobox) {
-        tooltipContent = node.data('tooltip');
-
-        if ( tooltipContent == undefined ) {
-          return;
-        }
-
-        ref = node.popperRef();
-      }
-      else {
-        tooltipContent = infobox['tooltip'];
-
-        if ( tooltipContent == undefined ) {
-          return;
-        }
-
-        var modelPos = chiseInstance.classes.AuxiliaryUnit.getAbsoluteCoord(infobox, node.cy());
-        var modelW = infobox.bbox.w;
-        var modelH = infobox.bbox.h;
-        var renderedW = modelW * zoom;
-        var renderedH = modelH * zoom;
-        modelPos.x -= modelW / 2;
-        modelPos.y -= modelH / 2;
-        var renderedPos = chiseInstance.elementUtilities.convertToRenderedPosition(modelPos, pan, zoom);
-
-        var renderedDims = { w: renderedW, h: renderedH };
-
-        ref = node.popperRef({
-          renderedPosition: function() {
-            return renderedPos;
-          },
-          renderedDimensions: function() {
-            return renderedDims;
-          }
-        });
-      }
-
-      var placement = infobox ? infobox.anchorSide : 'bottom';
-      var destroyTippy;
-
-      var tippy = Tippy.one(ref, {
-        content: (() => {
-          var content = document.createElement('div');
-
-          content.style['font-size'] = 12 * zoom + 'px';
-          content.innerHTML = tooltipContent;
-
-          return content;
-        })(),
-        trigger: 'manual',
-        hideOnClick: true,
-        arrow: true,
-        placement,
-        onHidden: function() {
-          cy.off('pan zoom', destroyTippy);
-          node.off('position', destroyTippy);
-        }
-      });
-
-      destroyTippy = function(){
-        tippy.destroy();
-      };
-
-      cy.on('pan zoom', destroyTippy);
-      node.on('position', destroyTippy);
-
-      setTimeout( () => tippy.show(), 0 );
     });
   }
 

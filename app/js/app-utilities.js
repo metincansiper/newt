@@ -429,16 +429,6 @@ appUtilities.createNewNetwork = function () {
   // init the current file name for the map
   appUtilities.setScratch(newInst.getCy(), 'currentFileName', 'new_file.sbgnml');
 
-  var topologyGroupingFactory = require('./topology-grouping-factory');
-  // init the topologyGrouping instance for the map
-  var topologyGrouping = topologyGroupingFactory();
-  // Topology grouping should be aplied if the map type is sif
-  var shouldApply = function() {
-    return newInst.elementUtilities.mapType === 'SIF';
-  };
-  topologyGrouping(newInst, { metaEdgeIdentifier: 'sif-meta', lockGraphTopology: true, shouldApply });
-  appUtilities.setScratch(newInst.getCy(), 'sifTopologyGrouping', topologyGrouping);
-
   // register cy extensions, bind cy events etc.
   var appCy = require('./app-cy');
   appCy(newInst);
@@ -2020,9 +2010,24 @@ appUtilities.dragImageMouseMoveHandler = function (e) {
       $("#drag-image").css({left:e.pageX, top:e.pageY});
 };
 
-appUtilities.addDragImage = function (img, width, height){
+// get drag image for the given html value
+// html value corresponds to sbgnclass where space char is
+// replaced by '-' char
+appUtilities.getDragImagePath = function (htmlValue) {
+  var imgNameMap = {
+    'SIF-macromolecule': 'macromolecule',
+    'SIF-simple-chemical': 'simple-chemical'
+  };
+
+  var imgName = imgNameMap[ htmlValue ] || htmlValue;
+  var imgPath = 'app/img/nodes/' + imgName + '.svg';
+
+  return imgPath;
+}
+
+appUtilities.addDragImage = function (imgPath, width, height){
   // see: http://stackoverflow.com/questions/38838508/make-a-dynamic-image-follow-mouse
-  $(document.body).append('<img id="drag-image" src="app/img/nodes/'+img+'" style="position: absolute;'+
+  $(document.body).append('<img id="drag-image" src="'+imgPath+'" style="position: absolute;'+
                                 'width:'+width+'; height:'+height+'; left: -100px; top: -100px;" >');
   $(document).on("mousemove", appUtilities.dragImageMouseMoveHandler);
 };
@@ -2340,7 +2345,7 @@ appUtilities.setMapProperties = function(mapProperties, _chiseInstance) {
       chiseInstance.disablePorts();
     }
 
-    var topologyGrouping = appUtilities.getScratch(chiseInstance.getCy(), 'sifTopologyGrouping');
+    var topologyGrouping = chiseInstance.sifTopologyGrouping;
     if (currentGeneralProperties.enableSIFTopologyGrouping) {
       topologyGrouping.apply();
     }
@@ -2958,6 +2963,9 @@ appUtilities.transformClassInfo = function( classInfo ) {
   }
   else if (res.includes("Ba ")){
     res = "BA " + res.substr(3);
+  }
+  else if (res.includes("Sif ")) {
+    res = "SIF " + res.substr(3);
   }
 
   return res;
